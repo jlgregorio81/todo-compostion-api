@@ -1,7 +1,8 @@
 <template>
   <div class="todo-app">
     <h2>Manage your "to-do list"</h2>
-    <input style="width: 320px"
+    <input
+      style="width: 320px"
       type="text"
       name=""
       id=""
@@ -17,33 +18,78 @@
 
     <div class="todo-list" v-for="item in todoList" :key="item.name">
       <div class="todo-item">
-        <div :class="item.status == 'todo' ? 'todo' : item.status == 'doing' ? 'doing' : 'done'">
-          <p> {{ item.name }} </p>
+        <div
+          :class="
+            item.status == 'todo'
+              ? 'todo'
+              : item.status == 'doing'
+              ? 'doing'
+              : 'done'
+          "
+        >
+          <p>{{ item.name }}</p>
         </div>
         <div class="todo-command">
-          <select v-model="item.status" >
+          <select v-model="item.status">
             <option value="todo">To do</option>
             <option value="doing">Doing</option>
             <option value="done">Done</option>
           </select>
         </div>
-        <div class="todo-command"><button @click="remove(item)">Delete</button></div>
+        <div class="todo-command">
+          <button
+            @click="
+              showPopup = true;
+              itemToRemove = item;
+            "
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </div>
+    <p><strong>To-do: </strong>{{ countTodo }}</p>
+    <p><strong>Doing: </strong>{{ countDoing }}</p>
+    <p><strong>Done: </strong>{{ countDone }}</p>
+    <p><strong>Total: </strong>{{ countTodo + countDoing + countDone }}</p>
+
+    <teleport to="body">
+      <Popup
+        title="Confirme"
+        msg="Tem certeza que deseja excluir?"
+        v-show="showPopup"
+        @closePopup="deleteItem"
+      />
+    </teleport>
   </div>
 </template>
 
 <script>
 import { UseTodo } from "./UseTodo.js";
+import Popup from "../Popup.vue";
 
 export default {
   name: "Todo",
-  setup() {
-    const { todo, todoList, insert, getCurrentIndex, remove, setStatus } =
-      UseTodo();
-    return { todo, todoList, insert, getCurrentIndex, remove, setStatus };
+  data() {
+    return {
+      showPopup: false,
+      itemToRemove: "", //to delete
+    };
   },
-  methods: {},
+  components: {
+    Popup,
+  },
+  setup() {
+    return UseTodo();
+  },
+  methods: {
+    deleteItem(event) {
+      if (event) {
+        this.remove(this.itemToRemove);
+      }
+      this.showPopup = false;
+    },
+  },
 };
 </script>
 
@@ -67,7 +113,6 @@ div.todo-list {
   display: inline-flex;
   flex-direction: row;
   justify-content: left;
-  
 }
 
 .todo-item {
@@ -77,7 +122,6 @@ div.todo-list {
   background-color: lightgreen;
   border-radius: 5px;
 }
-
 
 .todo {
   flex: 4;

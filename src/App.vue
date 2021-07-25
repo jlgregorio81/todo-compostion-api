@@ -1,5 +1,5 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
+  <img class="logo" alt="Vue logo" src="./assets/logo.png">
   <h1>To-do List with Composition API</h1>
   <Todo />
 
@@ -25,5 +25,8 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 
+}
+img.logo{
+  width: 128px;
 }
 </style>
