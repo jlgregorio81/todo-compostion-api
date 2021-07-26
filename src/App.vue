@@ -1,4 +1,5 @@
 <template>
+
   <img class="logo" alt="Vue logo" src="./assets/logo.png">
   <h1>To-do List with Composition API</h1>
   <Todo />

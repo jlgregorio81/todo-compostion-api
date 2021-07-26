@@ -1,63 +1,50 @@
 <template>
-  <div class="todo-app">
-    <h2>Manage your "to-do list"</h2>
-    <input
-      style="width: 320px"
-      type="text"
-      name=""
-      id=""
-      v-model="todo.name"
-      @keyup.enter="insert(todo)"
-    />
-    <select name="status" v-model="todo.status">
-      <option value="todo">To do</option>
-      <option value="doing">Doing</option>
-      <option value="done">Done</option>
-    </select>
-    <button @click="insert(todo)">Inserir</button>
-
-    <div class="todo-list" v-for="item in todoList" :key="item.name">
-      <div class="todo-item">
-        <div
-          :class="
-            item.status == 'todo'
-              ? 'todo'
-              : item.status == 'doing'
-              ? 'doing'
-              : 'done'
-          "
+  <div class="container">
+    <div class="row">
+      <div class="col-md-9 text-start">
+        <label class="form-label" for="todo">Nome/Descrição</label>
+        <input type="text" class="form-control" v-model="todo.name" id="todo" />
+      </div>
+      <div class="col-md-2 text-start">
+        <label class="form-label" for="status">Status</label>
+        <select id="status" v-model="todo.status" class="form-select">
+          <option value="todo">A fazer</option>
+          <option value="doing">Fazendo</option>
+          <option value="done">Feito</option>
+        </select>
+      </div>
+      <div class="col-md-1 align-self-end text-start">
+        <button
+          id="btn-insert"
+          type="button"
+          class="btn btn-primary"
+          @click="insert(todo)"
         >
-          <p>{{ item.name }}</p>
-        </div>
-        <div class="todo-command">
-          <select v-model="item.status">
-            <option value="todo">To do</option>
-            <option value="doing">Doing</option>
-            <option value="done">Done</option>
-          </select>
-        </div>
-        <div class="todo-command">
-          <button
-            @click="
-              showPopup = true;
-              itemToRemove = item;
-            "
-          >
-            Delete
-          </button>
-        </div>
+          Inserir
+        </button>
       </div>
     </div>
-    <p><strong>To-do: </strong>{{ countTodo }}</p>
-    <p><strong>Doing: </strong>{{ countDoing }}</p>
-    <p><strong>Done: </strong>{{ countDone }}</p>
-    <p><strong>Total: </strong>{{ countTodo + countDoing + countDone }}</p>
+    <hr />
+    <div class="row striped" v-for="item in todoList" :key="item.name">
+      <div class="col-md-9" >
+        <p class="text-start text-primary">{{ item.name }}</p>
+      </div>
+      <div class="col-md-2">
+        <select class="form-select" v-model="item.status">
+          <option value="todo">A fazer</option>
+          <option value="doing">Fazendo</option>
+          <option value="done">Feito</option>
+        </select>
+      </div>
+      <div class="col-md-1">
+        <button class="btn btn-danger">Delete</button>
+      </div>
+    </div>
 
     <teleport to="body">
       <Popup
         title="Confirme"
         msg="Tem certeza que deseja excluir?"
-        v-show="showPopup"
         @closePopup="deleteItem"
       />
     </teleport>
@@ -94,33 +81,18 @@ export default {
 </script>
 
 <style scoped>
-div.todo-app {
-  background-color: lightgoldenrodyellow;
-  width: 480px;
-  margin: 0 auto;
-  border: solid darkblue thin;
-  border-radius: 5px;
-  box-shadow: 2px 2px 2px gray;
-}
-div > * {
-  margin: 3px;
-}
-p {
-  text-align: left;
+div.striped {
+  border-bottom: dotted lightgray thin;
+  padding: 5px;
 }
 
-div.todo-list {
-  display: inline-flex;
-  flex-direction: row;
-  justify-content: left;
+div.striped:hover {
+  background-color: rgb(245, 245, 250);
+  cursor: pointer;
 }
 
-.todo-item {
-  width: 460px;
-  display: flex;
-  flex-direction: row;
-  background-color: lightgreen;
-  border-radius: 5px;
+.container {
+  width: 75%;
 }
 
 .todo {
