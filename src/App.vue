@@ -1,20 +1,20 @@
 <template>
+  <img class="logo animate__animated animate__bounceInDown" alt="Vue logo" src="./assets/logo.png" />
+  <img class="logo animate__animated animate__bounceInDown" alt="Vue logo" src="./assets/bootstrap-logo.svg" />
 
-  <img class="logo" alt="Vue logo" src="./assets/logo.png">
-  <h1>To-do List with Composition API</h1>
+  <h1 class="animate__animated animate__bounceInLeft">To-do List with Composition API</h1>
   <Todo />
-
 </template>
 
 <script>
-import Todo from './components/Todo/Todo.vue'
+import Todo from "./components/Todo/Todo.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    Todo
-  }
-}
+    Todo,
+  },
+};
 </script>
 
 <style>
@@ -25,9 +25,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-
 }
-img.logo{
+img.logo {
   width: 128px;
 }
 </style>

@@ -1,9 +1,36 @@
 <template>
   <div class="container">
+    <div class="row animate__animated animate__bounceInUp">
+      <div class="col alert alert-warning">
+        <h2>A fazer: {{ countTodo }}</h2>
+      </div>
+      <div class="col">
+        <div class="col alert alert-primary">
+          <h2>Fazendo: {{ countDoing }}</h2>
+        </div>
+      </div>
+      <div class="col">
+        <div class="col alert alert-success">
+          <h2>Feito: {{ countDone }}</h2>
+        </div>
+      </div>
+      <div class="col">
+        <div class="col alert alert-secondary">
+          <h2>Total: {{ countTodo + countDoing + countDone }}</h2>
+        </div>
+      </div>
+    </div>
+
     <div class="row">
       <div class="col-md-9 text-start">
         <label class="form-label" for="todo">Nome/Descrição</label>
-        <input type="text" class="form-control" v-model="todo.name" id="todo" />
+        <input
+          type="text"
+          class="form-control"
+          v-model="todo.name"
+          id="todo"
+          @keyup.enter="insert(todo)"
+        />
       </div>
       <div class="col-md-2 text-start">
         <label class="form-label" for="status">Status</label>
@@ -25,21 +52,34 @@
       </div>
     </div>
     <hr />
-    <div class="row striped" v-for="item in todoList" :key="item.name">
-      <div class="col-md-9" >
-        <p class="text-start text-primary">{{ item.name }}</p>
+
+    <transition-group tag="div" name="todoitem">
+      <!-- enter-active-class="animate__animated animate__fadeInDown animate__faster"
+      leave-active-class="animate__animated animate__fadeOutUp animate__faster" -->
+
+      <div class="row striped" v-for="item in todoList" :key="item.name">
+        <div class="col-md-9">
+          <p class="text-start text-primary">{{ item.name }}</p>
+        </div>
+        <div class="col-md-2">
+          <select class="form-select" v-model="item.status">
+            <option value="todo">A fazer</option>
+            <option value="doing">Fazendo</option>
+            <option value="done">Feito</option>
+          </select>
+        </div>
+        <div class="col-md-1">
+          <button
+            @click="itemToRemove = item"
+            class="btn btn-danger"
+            data-bs-toggle="modal"
+            data-bs-target="#modal"
+          >
+            Delete
+          </button>
+        </div>
       </div>
-      <div class="col-md-2">
-        <select class="form-select" v-model="item.status">
-          <option value="todo">A fazer</option>
-          <option value="doing">Fazendo</option>
-          <option value="done">Feito</option>
-        </select>
-      </div>
-      <div class="col-md-1">
-        <button class="btn btn-danger">Delete</button>
-      </div>
-    </div>
+    </transition-group>
 
     <teleport to="body">
       <Popup
@@ -73,6 +113,7 @@ export default {
     deleteItem(event) {
       if (event) {
         this.remove(this.itemToRemove);
+        //console.log('Item: ', this.itemToRemove);
       }
       this.showPopup = false;
     },
@@ -81,6 +122,44 @@ export default {
 </script>
 
 <style scoped>
+
+.todoitem-enter-from {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.todoitem-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.todoitem-enter-active {
+  transition: all 0.3s ease;
+}
+
+.todoitem-leave-from {
+  opacity: 1;
+}
+
+.todoitem-leave-to {
+  opacity: 0;
+  transform: translateY(-10);
+}
+
+.todoitem-leave-active {
+  transition: all 0.5s ;
+  position: absolute;
+  width: 90%;
+
+  
+}
+
+.todoitem-move{
+  transition: all 0.3s ease;
+}
+
+ /* --------------------------------------- */
+
 div.striped {
   border-bottom: dotted lightgray thin;
   padding: 5px;
@@ -93,22 +172,5 @@ div.striped:hover {
 
 .container {
   width: 75%;
-}
-
-.todo {
-  flex: 4;
-  color: darkblue;
-  justify-items: left;
-}
-
-.doing {
-  color: green;
-  flex: 4;
-}
-
-.done {
-  color: red;
-  text-decoration: line-through;
-  flex: 4;
 }
 </style>
