@@ -1,4 +1,5 @@
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, watch } from 'vue'
+import todos from "../../store/todos.json"
 
 export function UseTodo() {
 
@@ -7,22 +8,11 @@ export function UseTodo() {
         name: '', status: 'todo'
     })
 
-    //..define a list
-    //const todoList = reactive({value : [
-        //{name : 'Estudar Vue Js', status : 'todo'}
-   // ]})
-
-    const todoList = ref([
-        {name : 'Estudar HTML', status : 'done'},
-        {name : 'Estudar CSS', status : 'doing'},
-        {name : 'Estudar Javascript', status : 'todo'},
-        {name : 'Estudar Vue Js', status : 'doing'},
-        {name : 'Verificar E-mail', status : 'todo'},
-    ])
+    const todoList = reactive(todos.content)
 
     const countTodo = computed(() => {
         let total = 0
-        todoList.value.forEach(element => {
+        todoList.forEach(element => {
             if(element.status === 'todo'){
                 total++
             }
@@ -32,7 +22,7 @@ export function UseTodo() {
 
     const countDoing = computed(() => {
         let total = 0
-        todoList.value.forEach(element => {
+        todoList.forEach(element => {
             if(element.status === 'doing'){
                 total++
             }
@@ -42,7 +32,7 @@ export function UseTodo() {
 
     const countDone = computed(() => {
         let total = 0
-        todoList.value.forEach(element => {
+        todoList.forEach(element => {
             if(element.status === 'done'){
                 total++
             }
@@ -64,13 +54,13 @@ export function UseTodo() {
     //..inserting a new todo in the list
     function insert(todo) {
         let newTodo = JSON.parse(JSON.stringify(todo))
-        todoList.value.push(newTodo)
+        todoList.push(newTodo)
         todo.name = ''
     }
 
     //..get the current inde of todo in list
     function getCurrentIndex(todo) {
-        let index = todoList.value.findIndex( (item) => {
+        let index = todoList.findIndex( (item) => {
             return item.name === todo.name;
         });
         return index
@@ -79,7 +69,7 @@ export function UseTodo() {
     //..removing a todo
     function remove(todo) {
         let index = getCurrentIndex(todo);
-        todoList.value.splice(index, 1);
+        todoList.splice(index, 1);
     }
 
     //..set the status os the todo
