@@ -13,7 +13,11 @@ export function UseTodo() {
    // ]})
 
     const todoList = ref([
-        {name : 'Estudar Vue Js', status : 'todo'}
+        {name : 'Estudar HTML', status : 'done'},
+        {name : 'Estudar CSS', status : 'doing'},
+        {name : 'Estudar Javascript', status : 'todo'},
+        {name : 'Estudar Vue Js', status : 'doing'},
+        {name : 'Verificar E-mail', status : 'todo'},
     ])
 
     const countTodo = computed(() => {
@@ -46,10 +50,15 @@ export function UseTodo() {
         return parseInt(total)
     })
 
+    const progressMeter = computed (() => {
+        let total = countTodo.value + countDoing.value + countDone.value
+        return parseInt((countDone.value / total) * 100)
+    })
+
 
     //..a watcher 
-    watch([countTodo, countDoing, countDone], () => {
-        return countTodo, countDoing, countDone
+    watch([countTodo, countDoing, countDone, progressMeter], () => {
+        return countTodo, countDoing, countDone, progressMeter
     })
 
     //..inserting a new todo in the list
@@ -83,7 +92,7 @@ export function UseTodo() {
     //..return the elements to integrate in .vue file
     return {
         todo, todoList, insert, getCurrentIndex, remove, setStatus, 
-        countTodo, countDoing, countDone
+        countTodo, countDoing, countDone, progressMeter
     }
 
 }

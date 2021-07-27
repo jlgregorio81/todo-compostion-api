@@ -20,6 +20,18 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <div class="col">
+        <div class="progress" style="height: 12px">
+          <div
+            class="progress-bar"
+            role="progressbar"
+            :style="`width : ${ progressMeter }%`"
+          >{{ progressMeter }}%</div>
+        </div>
+      </div>
+    </div>
+    <hr>
 
     <div class="row">
       <div class="col-md-9 text-start">
@@ -57,9 +69,25 @@
       <!-- enter-active-class="animate__animated animate__fadeInDown animate__faster"
       leave-active-class="animate__animated animate__fadeOutUp animate__faster" -->
 
-      <div class="row striped" v-for="item in todoList" :key="item.name">
+      <div
+        class="row striped"
+        :class="
+          item.status === 'todo'
+            ? 'alert-warning'
+            : item.status === 'doing'
+            ? 'alert-primary'
+            : 'alert-success'
+        "
+        v-for="item in todoList"
+        :key="item.name"
+      >
         <div class="col-md-9">
-          <p class="text-start text-primary">{{ item.name }}</p>
+          <p
+            class="text-start"
+            :class="item.status === 'done' ? 'item-done' : ''"
+          >
+            {{ item.name }}
+          </p>
         </div>
         <div class="col-md-2">
           <select class="form-select" v-model="item.status">
@@ -101,6 +129,7 @@ export default {
     return {
       showPopup: false,
       itemToRemove: "", //to delete
+      statusClass: "",
     };
   },
   components: {
@@ -122,7 +151,7 @@ export default {
 </script>
 
 <style scoped>
-
+/* ------ animations ---------- */
 .todoitem-enter-from {
   opacity: 0;
   transform: translateY(-10px);
@@ -139,26 +168,29 @@ export default {
 
 .todoitem-leave-from {
   opacity: 1;
+  transform: scale(100%);
 }
 
 .todoitem-leave-to {
   opacity: 0;
-  transform: translateY(-10);
+  transform: scale(5%);
+  animation-delay: 0.5s;
 }
 
 .todoitem-leave-active {
-  transition: all 0.5s ;
-  position: absolute;
-  width: 90%;
-
-  
+  transition: 0.5s;
+  /* position: absolute; */
 }
 
-.todoitem-move{
+.todoitem-move {
   transition: all 0.3s ease;
 }
 
- /* --------------------------------------- */
+/* --------------------------------------- */
+
+.item-done {
+  text-decoration: line-through;
+}
 
 div.striped {
   border-bottom: dotted lightgray thin;
@@ -166,7 +198,9 @@ div.striped {
 }
 
 div.striped:hover {
-  background-color: rgb(245, 245, 250);
+  /* background-color: rgb(245, 245, 250); */
+  /* outline: lightblue thin solid;  */
+  opacity: 0.7;
   cursor: pointer;
 }
 
